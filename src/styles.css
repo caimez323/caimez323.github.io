@@ -1,19 +1,19 @@
 body {
     font-family: 'Bahnschrift', 'Times New Roman', serif;
-    padding: 0px;
-    margin-left: 35px;
-}
-html, body {
-    height: 95%;
+
+    margin-left: 25px;
 }
 
 
 html{
-    background-image: url('https://imgs.search.brave.com/VTZvEAHNkEKoPJtoUD9P5B7jV8zckMvRyFHGDQXK_mk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDQyOTQ5/MzEuanBn'); /* Remplacez 'votre-image.jpg' par le chemin de votre image */
-    background-repeat: no-repeat; /* Empêche la répétition de l'image */
-    background-size: cover; /* Fait en sorte que l'image couvre entièrement l'élément */
-    background-position: center; /* Centre l'image dans l'élément */
+    background-image: url('background.png'); 
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: center; 
+    background-attachment: fixed; 
+
 }
+
 .container {
     overflow: hidden;
 }
@@ -22,7 +22,33 @@ html{
 h1 {
     text-align: center;
     margin-top: 20px;
+    color: rgb(255, 255, 255);
+}
+
+a{
+    margin-left: 5px;
+}
+
+button {
+    font-family: 'Bahnschrift', sans-serif;
+    border: 2px solid white;
+    background-color: rgba(0, 0, 0, 0.3); /* Fond noir avec moins d'opacité */
     color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    outline: none;
+    font-size: 16px;
+    border-radius: 12px; /* Contours arrondis */
+    transition: background-color 0.3s, transform 0.3s; /* Animation */
+}
+button:hover {
+    background-color: rgba(64, 139, 224, 0.7); /* Bleu turquoise avec opacité */
+    transform: scale(1.05); /* Effet d'agrandissement au survol */
+}
+
+div{
+    margin-right: 13px;
+
 }
 
 
