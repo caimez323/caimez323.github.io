@@ -1,0 +1,28 @@
+body {
+    font-family: 'Bahnschrift', 'Times New Roman', serif;
+    padding: 0px;
+    margin-left: 35px;
+}
+html, body {
+    height: 95%;
+}
+
+
+html{
+    background-image: url('https://imgs.search.brave.com/VTZvEAHNkEKoPJtoUD9P5B7jV8zckMvRyFHGDQXK_mk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDQyOTQ5/MzEuanBn'); /* Remplacez 'votre-image.jpg' par le chemin de votre image */
+    background-repeat: no-repeat; /* Empêche la répétition de l'image */
+    background-size: cover; /* Fait en sorte que l'image couvre entièrement l'élément */
+    background-position: center; /* Centre l'image dans l'élément */
+}
+.container {
+    overflow: hidden;
+}
+
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: white;
+}
+
+
