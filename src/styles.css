@@ -1,6 +1,6 @@
 body {
     font-family: 'Bahnschrift', 'Times New Roman', serif;
-
+    color: white;
     margin-left: 25px;
 }
 
@@ -22,7 +22,6 @@ html{
 h1 {
     text-align: center;
     margin-top: 20px;
-    color: rgb(255, 255, 255);
 }
 
 a{
