@@ -9,12 +9,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body onload="generateLinks()">
+    <div class="video-container">
+        <video autoplay muted loop id="background-video">
+            <source src="../resources/snifsnouf/background.mov" type="video/mp4">
+            Votre navigateur ne supporte pas les vidéos HTML5.
+        </video>
+    </div>
+    <div class="header-container">
         <h1>Super Giveaway</h1>
         <button onclick="generateLinks()">Rafraichir les liens</button>
-        <p>Pour tout ouvir d'un coup merci d'utiliser le bot</p>
-        <br>
-        <br>
-        <div id="linksContainer"></div>
+    </div>
+    <p>Pour tout ouvrir d'un coup merci d'utiliser le bot</p>
+    <br>
+    <br>
+    <div id="linksContainer"></div>
    
     
 </body>
@@ -57,7 +65,9 @@
                             const urlSuffix = data[key];
                             const url = `https://www.instant-gaming.com/fr/giveaway/${urlSuffix}`;
                             urls.push(url)
-                            const imgSrc = 'https://gaming-cdn.com/images/avatars/16693760-1689603180.jpg';
+                            // const imgSrc = 'https://gaming-cdn.com/images/avatars/16693760-1689603180.jpg';
+                            const imgSrc = `../resources/snifsnouf/pp/img_${urlSuffix}.jpg`;
+                            const fallbackImgSrc = '../resources/snifsnouf/img_DEFAULT.PNG';
 
                             // Create the <a> element
                             const aTag = document.createElement('a');
@@ -71,6 +81,10 @@
                             imgTag.src = imgSrc;
                             imgTag.width = 76;
                             imgTag.height = 76;
+                            imgTag.onerror = function() {
+                                    this.onerror = null;
+                                    this.src = fallbackImgSrc;
+                            };
 
                             // Append the <img> to the <a>, and the <a> to the container
                             aTag.appendChild(imgTag);
