@@ -18,7 +18,7 @@
     </div>
     <div class="header-container">
         <h1>Super Giveaway</h1>
-        <button onclick="generateLinks()">Rafraichir les liens</button>
+        <button onclick="syncElements()">Syncronisation</button>
         <button onclick="resetBlocks()">Réinitialiser</button>
         <button id="toggle-selection" onclick="toggleSelectionBorders()">Activer sélection</button>
     </div>
@@ -39,7 +39,7 @@
 
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js';
-    import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js';
+    import { getDatabase, ref, get, update } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js';
 
     const firebaseConfig = {
         apiKey: "AIzaSyBXKlCJFnIlNImXYaaiQ6cyp8x1nuFsX-k",
@@ -56,11 +56,13 @@
 
     let urls = [];
     let selectionBordersEnabled = false;
+    let localData = [];
+    let dataComplete
 
     window.generateLinks = function() {
         get(ref(database, '/')).then((snapshot) => {
             if (snapshot.exists()) {
-                const dataComplete = snapshot.val();
+                dataComplete = snapshot.val();
                 const data = dataComplete.map(item => item[1]);
                 
                 urls = [];
@@ -91,7 +93,15 @@
             }
         });
     };
-
+    window.syncElements = function syncElements(){
+        for(let i = 0; i< localData.length; i++){
+            //localData[i] = [idElement, NouvelleValeur]
+            update(ref(database, localData[i][0]), {
+                    0: localData[i][1]
+                }) 
+        }
+        localData = []
+    }
     function createImageWithButtons(url, imgSrc, fallbackImgSrc, key) {
         const imgContainer = document.createElement('div');
         imgContainer.className = 'img-container';
@@ -148,6 +158,7 @@
 
     function moveToBlock(key, blockNumber) {
         const imgContainer = document.querySelector(`[data-key="${key}"]`);
+        localData.push([key,blockNumber])
         if (imgContainer) {
             document.getElementById(`block${blockNumber}`).appendChild(imgContainer);
         }
