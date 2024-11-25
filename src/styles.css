@@ -4,50 +4,8 @@ body {
     margin-left: 25px;
 }
 
-
-html{
-    background-image: url('../resources/snifsnouf/background.png'); 
-    background-repeat: no-repeat;
-    background-size: cover; 
-    background-position: center; 
-    background-attachment: fixed; 
-
-}
-
-.container {
-    overflow: hidden;
-}
-
-
-h1 {
-    text-align: center;
-    margin-top: 20px;
-}
-
-a{
-    margin-left: 5px;
-}
-
-button {
-    font-family: 'Bahnschrift', sans-serif;
-    border: 2px solid white;
-    background-color: rgba(0, 0, 0, 0.3); /* Fond noir avec moins d'opacité */
-    color: white;
-    padding: 10px 20px;
-    cursor: pointer;
-    outline: none;
-    font-size: 16px;
-    border-radius: 12px; /* Contours arrondis */
-    transition: background-color 0.3s, transform 0.3s; /* Animation */
-}
-button:hover {
-    background-color: rgba(64, 139, 224, 0.7); /* Bleu turquoise avec opacité */
-    transform: scale(1.05); /* Effet d'agrandissement au survol */
-}
-
-div{
-    margin-right: 13px;
-
+html {
+    height: 100%;
 }
 
 .video-container {
@@ -57,14 +15,83 @@ div{
     width: 100%;
     height: 100%;
     overflow: hidden;
-    z-index: -1; /* Assure que la vidéo reste en arrière-plan */
+    z-index: -1;
 }
 
 #background-video {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Assure que la vidéo couvre tout l'écran */
+    object-fit: cover;
     position: absolute;
     top: 0;
     left: 0;
+}
+
+h1, h2 {
+    text-align: left;
+    margin-left: 20px;
+    color: white;
+}
+
+button {
+    font-family: 'Bahnschrift', sans-serif;
+    border: 2px solid white;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    outline: none;
+    font-size: 16px;
+    border-radius: 12px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: rgba(64, 139, 224, 0.7);
+    transform: scale(1.05);
+}
+
+.link-block {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.img-container {
+    position: relative;
+    display: inline-block;
+    margin: 4px;
+}
+
+.hover-buttons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background-color: transparent;
+}
+
+.hover-buttons button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: 1px solid white;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.hover-buttons button:hover {
+    background-color: rgba(64, 139, 224, 0.7);
+}
+
+.hidden {
+    display: none;
 }

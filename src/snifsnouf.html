@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=0.0">
-
-    <title>Titre de l'onglet</title>
+    <title>Super Giveaway</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="../resources/snifsnouf/favicon.png">
 </head>
 <body onload="generateLinks()">
     <div class="video-container">
@@ -18,21 +17,28 @@
     <div class="header-container">
         <h1>Super Giveaway</h1>
         <button onclick="generateLinks()">Rafraichir les liens</button>
+        <button onclick="resetBlocks()">Réinitialiser</button>
+        <button id="toggle-selection" onclick="toggleSelectionBorders()">Activer sélection</button>
     </div>
     <p>Pour tout ouvrir d'un coup merci d'utiliser le bot</p>
-    <br>
-    <br>
-    <div id="linksContainer"></div>
-   
-    
+    <br><br>
+    <!-- Titres et 5 blocs pour le tri -->
+    <h2>Tous les liens</h2>
+    <div id="block0" class="link-block"></div>
+    <h2>Liens fonctionnels</h2>
+    <div id="block1" class="link-block"></div>
+    <h2>Liens fonctionnels (+ bannière The Last of Us)</h2>
+    <div id="block2" class="link-block"></div>
+    <h2>Giveaways terminés</h2>
+    <div id="block3" class="link-block"></div>
+    <h2>Liens morts</h2>
+    <div id="block4" class="link-block"></div>
 </body>
 
 <script type="module">
-    // Import Firebase modules
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js';
     import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js';
 
-    // Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBXKlCJFnIlNImXYaaiQ6cyp8x1nuFsX-k",
         authDomain: "snifsnoufdataconnect.firebaseapp.com",
@@ -43,69 +49,126 @@
         appId: "1:798907181327:web:7a3efc45169cc96bf0767a"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
-    let urls = []
-    // Function to generate links
+    let urls = [];
+    let selectionBordersEnabled = false;
+
     window.generateLinks = function() {
-        // Get data from the root of the Firebase database
-        get(ref(database, '/'))
-            .then((snapshot) => {
-                if (snapshot.exists()) {
-                    const linksContainer = document.getElementById('linksContainer');
-                    linksContainer.innerHTML = ''; // Clear previous links
-
-                    const data = snapshot.val();
-
-                    // Iterate over each key-value pair in the root
-                    for (const key in data) {
-                        if (data.hasOwnProperty(key)) {
-                            const urlSuffix = data[key];
-                            const url = `https://www.instant-gaming.com/fr/giveaway/${urlSuffix}`;
-                            urls.push(url)
-                            // const imgSrc = 'https://gaming-cdn.com/images/avatars/16693760-1689603180.jpg';
-                            const imgSrc = `../resources/snifsnouf/PP/img_${urlSuffix}.jpg`;
-                            const fallbackImgSrc = '../resources/snifsnouf/img_DEFAULT.png';
-
-                            // Create the <a> element
-                            const aTag = document.createElement('a');
-                            aTag.className = 'giveaway';
-                            aTag.href = url;
-                            aTag.target = '_blank';
-                            aTag.rel = 'noreferrer';
-
-                            // Create the <img> element
-                            const imgTag = document.createElement('img');
-                            imgTag.src = imgSrc;
-                            imgTag.width = 76;
-                            imgTag.height = 76;
-                            imgTag.onerror = function() {
-                                    this.onerror = null;
-                                    this.src = fallbackImgSrc;
-                            };
-
-                            // Append the <img> to the <a>, and the <a> to the container
-                            aTag.appendChild(imgTag);
-                            linksContainer.appendChild(aTag);
-                        }
-                    }
-                } else {
-                    document.getElementById('linksContainer').textContent = 'No data available';
+        get(ref(database, '/')).then((snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                urls = [];
+                for (let block = 0; block <= 4; block++) {
+                    document.getElementById(`block${block}`).innerHTML = '';
                 }
-            })
-            .catch((error) => document.getElementById('linksContainer').textContent = 'Error: ' + error.message);
-    }
 
-     // Function to open all links
-     window.openAllLinks = function() {
-        for(var i = 0; i < urls.length;i++){
-            chrome.tabs.create({url:urls[i]})
+                for (const key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        const urlSuffix = data[key];
+                        const url = `https://www.instant-gaming.com/fr/giveaway/${urlSuffix}`;
+                        urls.push(url);
+                        const imgSrc = `../resources/snifsnouf/PP/img_${urlSuffix}.jpg`;
+                        const fallbackImgSrc = '../resources/snifsnouf/img_DEFAULT.png';
+
+                        const imgContainer = createImageWithButtons(url, imgSrc, fallbackImgSrc, key);
+                        document.getElementById('block0').appendChild(imgContainer);
+                    }
+                }
+            } else {
+                for (let block = 0; block <= 4; block++) {
+                    document.getElementById(`block${block}`).textContent = 'No data available';
+                }
+            }
+        }).catch((error) => {
+            for (let block = 0; block <= 4; block++) {
+                document.getElementById(`block${block}`).textContent = 'Error: ' + error.message;
+            }
+        });
+    };
+
+    function createImageWithButtons(url, imgSrc, fallbackImgSrc, key) {
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'img-container';
+        imgContainer.setAttribute('data-key', key);
+
+        const aTag = document.createElement('a');
+        aTag.href = url;
+        aTag.target = '_blank';
+        aTag.rel = 'noreferrer';
+
+        const imgTag = document.createElement('img');
+        imgTag.src = imgSrc;
+        imgTag.width = 76;
+        imgTag.height = 76;
+        imgTag.onerror = function() {
+            this.onerror = null;
+            this.src = fallbackImgSrc;
+        };
+
+        aTag.appendChild(imgTag);
+
+        const hoverButtons = document.createElement('div');
+        hoverButtons.className = 'hover-buttons hidden';
+
+        for (let i = 1; i <= 4; i++) {
+            const button = document.createElement('button');
+            button.textContent = i;
+            button.onclick = (e) => {
+                e.preventDefault();
+                moveToBlock(key, i);
+            };
+            hoverButtons.appendChild(button);
         }
-            
+
+        imgContainer.appendChild(aTag);
+        imgContainer.appendChild(hoverButtons);
+
+        setHoverButtonsVisibility(imgContainer, hoverButtons);
+
+        return imgContainer;
     }
+
+    function setHoverButtonsVisibility(imgContainer, hoverButtons) {
+        imgContainer.onmouseenter = function () {
+            if (selectionBordersEnabled) {
+                hoverButtons.classList.remove('hidden'); // Affiche les boutons seulement si sélection activée
+            }
+        };
+
+        imgContainer.onmouseleave = function () {
+            hoverButtons.classList.add('hidden'); // Cache les boutons dès qu'on quitte l'image
+        };
+    }
+
+    function moveToBlock(key, blockNumber) {
+        const imgContainer = document.querySelector(`[data-key="${key}"]`);
+        if (imgContainer) {
+            document.getElementById(`block${blockNumber}`).appendChild(imgContainer);
+        }
+    }
+
+    window.resetBlocks = function() {
+        const block0 = document.getElementById('block0');
+        for (let block = 1; block <= 4; block++) {
+            const currentBlock = document.getElementById(`block${block}`);
+            while (currentBlock.firstChild) {
+                block0.appendChild(currentBlock.firstChild);
+            }
+        }
+    };
+
+    window.toggleSelectionBorders = function() {
+        selectionBordersEnabled = !selectionBordersEnabled;
+
+        const toggleButton = document.getElementById('toggle-selection');
+        if (selectionBordersEnabled) {
+            toggleButton.textContent = 'Désactiver sélection';
+            toggleButton.style.backgroundColor = 'rgba(64, 139, 224, 0.7)';
+        } else {
+            toggleButton.textContent = 'Activer sélection';
+            toggleButton.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+        }
+    };
 </script>
-
-
-</html>
