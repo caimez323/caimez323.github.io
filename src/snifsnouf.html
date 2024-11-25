@@ -61,7 +61,7 @@
         get(ref(database, '/')).then((snapshot) => {
             if (snapshot.exists()) {
                 const dataComplete = snapshot.val();
-                data = dataComplete.map(item => item[1]);
+                const data = dataComplete.map(item => item[1]);
                 
                 urls = [];
                 for (let block = 0; block <= 4; block++) {
