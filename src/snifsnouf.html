@@ -63,31 +63,37 @@
         get(ref(database, '/')).then((snapshot) => {
             if (snapshot.exists()) {
                 dataComplete = snapshot.val();
-                const data = dataComplete.map(item => item[1]);
-                
-                urls = [];
+
+                // Réinitialiser les blocs avant de les remplir
                 for (let block = 0; block <= 4; block++) {
                     document.getElementById(`block${block}`).innerHTML = '';
                 }
 
-                for (const key in data) {
-                    if (data.hasOwnProperty(key)) {
-                        const urlSuffix = data[key];
+                // Parcourir les données pour créer les images et les placer
+                for (const key in dataComplete) {
+                    if (dataComplete.hasOwnProperty(key)) {
+                        const item = dataComplete[key];
+                        const urlSuffix = item[1]; // URL ou identifiant d'image
+                        const position = item[0]; // Bloc dans lequel l'image doit être placée
+                        const resolvedBlock = position ?? 0; // Par défaut dans le bloc 0 si aucune position
+
                         const url = `https://www.instant-gaming.com/fr/giveaway/${urlSuffix}`;
-                        urls.push(url);
                         const imgSrc = `../resources/snifsnouf/PP/img_${urlSuffix}.jpg`;
                         const fallbackImgSrc = '../resources/snifsnouf/img_DEFAULT.png';
 
+                        // Créer l'image avec ses boutons et la placer
                         const imgContainer = createImageWithButtons(url, imgSrc, fallbackImgSrc, key);
-                        document.getElementById('block0').appendChild(imgContainer);
+                        document.getElementById(`block${resolvedBlock}`).appendChild(imgContainer);
                     }
                 }
             } else {
+                // Si aucune donnée, afficher un message dans chaque bloc
                 for (let block = 0; block <= 4; block++) {
                     document.getElementById(`block${block}`).textContent = 'No data available';
                 }
             }
         }).catch((error) => {
+            // Gérer les erreurs et afficher un message dans chaque bloc
             for (let block = 0; block <= 4; block++) {
                 document.getElementById(`block${block}`).textContent = 'Error: ' + error.message;
             }
