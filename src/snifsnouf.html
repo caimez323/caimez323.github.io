@@ -19,7 +19,6 @@
     <div class="header-container">
         <h1>Super Giveaway</h1>
         <button onclick="syncElements()">Syncronisation</button>
-        <button onclick="resetBlocks()">Réinitialiser</button>
         <button id="toggle-selection" onclick="toggleSelectionBorders()">Activer sélection</button>
     </div>
     <p>Pour tout ouvrir d'un coup merci d'utiliser le bot</p>
@@ -169,16 +168,6 @@
             document.getElementById(`block${blockNumber}`).appendChild(imgContainer);
         }
     }
-
-    window.resetBlocks = function() {
-        const block0 = document.getElementById('block0');
-        for (let block = 1; block <= 4; block++) {
-            const currentBlock = document.getElementById(`block${block}`);
-            while (currentBlock.firstChild) {
-                block0.appendChild(currentBlock.firstChild);
-            }
-        }
-    };
 
     window.toggleSelectionBorders = function() {
         selectionBordersEnabled = !selectionBordersEnabled;
