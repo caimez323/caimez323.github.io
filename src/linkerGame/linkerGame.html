@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lol truc 2</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #c74e4e url('fond.jpg') center center / cover no-repeat;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+        width: 80%;
+        max-width: 600px;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .word-area {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .word-box {
+        display: flex;
+        transition: transform 0.4s ease;
+    }
+
+    .word {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-align: center;
+        font-size: 1.2em;
+        padding: 10px 20px;
+        white-space: nowrap;
+    }
+
+    .word img {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+    }
+
+    .controls {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+        border: none;
+        border-radius: 8px;
+        background: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    button:hover {
+        background: #0056b3;
+    }
+
+    #counter {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="word-area">
+        <div class="word-box" id="wordBox"></div>
+    </div>
+    <button id="mainBtn">▶</button>
+</div>
+
+<div class="controls">
+    <button id="resetBtn">Reset</button>
+</div>
+<div id="counter">Appuis : 0</div>
+
+<script>
+    const words = ["Mel","Yunara","Aatrox", "Ahri", "Akali", "Akshan", "Alistar", "Ambessa", "Amumu", "Anivia", "Annie", "Aphelios", "Ashe", "Aurelion Sol", "Aurora", "Azir", "Bard", "Bel’Veth", "Blitzcrank", "Brand", "Braum", "Briar", "Caitlyn", "Camille", "Cassiopeia", "Cho’Gath", "Corki", "Darius", "Diana", "Dr. Mundo", "Draven", "Ekko", "Elise", "Evelynn", "Ezreal", "Fiddlesticks", "Fiora", "Fizz", "Galio", "Gangplank", "Garen", "Gnar", "Gragas", "Graves", "Gwen", "Hecarim", "Heimerdinger", "Hwei", "Illaoi", "Irelia", "Ivern", "Janna", "Jarvan IV", "Jax", "Jayce", "Jhin", "Jinx", "Kai’Sa", "Kalista", "Karma", "Karthus", "Kassadin", "Katarina", "Kayle", "Kayn", "Kennen", "Kha’Zix", "Kindred", "Kled", "Kog’Maw", "K’Sante", "LeBlanc", "Lee Sin", "Leona", "Lillia", "Lissandra", "Lucian", "Lulu", "Lux", "Malphite", "Malzahar", "Maokai", "Master Yi", "Milio", "Miss Fortune", "Mordekaiser", "Morgana", "Naafiri", "Nami", "Nasus", "Nautilus", "Neeko", "Nidalee", "Nilah", "Nocturne", "Nunu & Willump", "Olaf", "Orianna", "Ornn", "Pantheon", "Poppy", "Pyke", "Qiyana", "Quinn", "Rakan", "Rammus", "Rek’Sai", "Rell", "Renata Glasc", "Renekton", "Rengar", "Riven", "Rumble", "Ryze", "Samira", "Sejuani", "Senna", "Seraphine", "Sett", "Shaco", "Shen", "Shyvana", "Singed", "Sion", "Sivir", "Skarner", "Smolder", "Sona", "Soraka", "Swain", "Sylas", "Syndra", "Tahm Kench", "Taliyah", "Talon", "Taric", "Teemo", "Thresh", "Tristana", "Trundle", "Tryndamere", "Twisted Fate", "Twitch", "Udyr", "Urgot", "Varus", "Vayne", "Veigar", "Vel’Koz", "Vex", "Vi", "Viego", "Viktor", "Vladimir", "Volibear", "Warwick", "Wukong", "Xayah", "Xerath", "Xin Zhao", "Yasuo", "Yone", "Yorick", "Yuumi", "Zac", "Zed", "Zeri", "Ziggs", "Zilean", "Zoe", "Zyra"];
+    let availableWords = [...words];
+
+    const wordBox = document.getElementById('wordBox');
+    const mainBtn = document.getElementById('mainBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const counterDisplay = document.getElementById('counter');
+
+    let clickCount = 0;
+    let offset = 0;
+
+    function formatChampionNameForImage(name) {
+        if (name === "Nunu & Willump") return "Nunu";
+        if (name === "Wukong") return "MonkeyKing";
+        if (name === "Rek'sai") return "RekSai";
+        if (name.includes("’")) {
+            return name
+            .replace(/’[A-Z]/g, m => m[1].toLowerCase())
+            .replace(/’/g, "")
+            .replace(/\s+/g, "")
+            .replace(/^\w/, c => c.toUpperCase());
+        } else {
+            return name
+            .replace(/\s+/g, "")
+            .replace(/^\w/, c => c.toUpperCase());
+        }
+    }
+
+    mainBtn.addEventListener('click', () => {
+        if (availableWords.length === 0) {
+            alert("Tous les champions ont été tirés !");
+            return;
+        }
+        clickCount++;
+
+        const idx = Math.floor(Math.random() * availableWords.length);
+        const champion = availableWords[idx];
+        availableWords.splice(idx, 1);
+
+        const imgName = formatChampionNameForImage(champion);
+        const word = document.createElement('div');
+        word.classList.add('word');
+
+        const img = document.createElement('img');
+        img.src = `https://ddragon.leagueoflegends.com/cdn/15.15.1/img/champion/${imgName}.png`;
+        img.alt = champion;
+
+        const span = document.createElement('span');
+        span.textContent = champion;
+
+        word.appendChild(img);
+        word.appendChild(span);
+        wordBox.appendChild(word);
+
+        if (word.previousElementSibling) {
+            offset += word.previousElementSibling.offsetWidth;
+        }
+        wordBox.style.transform = `translateX(-${offset}px)`;
+
+        counterDisplay.textContent = `Appuis : ${clickCount}`;
+    });
+
+    resetBtn.addEventListener('click', () => {
+        clickCount = 0;
+        offset = 0;
+        wordBox.innerHTML = '';
+        wordBox.style.transform = 'translateX(0)';
+        counterDisplay.textContent = `Appuis : 0`;
+        availableWords = [...words];
+    });
+</script>
+
+</body>
+</html>
