@@ -124,37 +124,42 @@
     }
 
     mainBtn.addEventListener('click', () => {
-        if (availableWords.length === 0) {
-            alert("Tous les champions ont été tirés !");
-            return;
-        }
-        clickCount++;
+    if (availableWords.length === 0) {
+        alert("Tous les champions ont été tirés !");
+        return;
+    }
+    clickCount++;
 
-        const idx = Math.floor(Math.random() * availableWords.length);
-        const champion = availableWords[idx];
-        availableWords.splice(idx, 1);
+    const idx = Math.floor(Math.random() * availableWords.length);
+    const champion = availableWords[idx];
+    availableWords.splice(idx, 1);
 
-        const imgName = formatChampionNameForImage(champion);
-        const word = document.createElement('div');
-        word.classList.add('word');
+    const imgName = formatChampionNameForImage(champion);
+    const word = document.createElement('div');
+    word.classList.add('word');
 
-        const img = document.createElement('img');
-        img.src = `https://ddragon.leagueoflegends.com/cdn/15.15.1/img/champion/${imgName}.png`;
-        img.alt = champion;
+    const img = document.createElement('img');
+    img.src = `https://ddragon.leagueoflegends.com/cdn/15.15.1/img/champion/${imgName}.png`;
+    img.alt = champion;
 
-        const span = document.createElement('span');
-        span.textContent = champion;
+    const span = document.createElement('span');
+    span.textContent = champion;
 
-        word.appendChild(img);
-        word.appendChild(span);
-        wordBox.appendChild(word);
+    word.appendChild(img);
+    word.appendChild(span);
+    wordBox.appendChild(word);
 
-        if (word.previousElementSibling) {
-            offset += word.previousElementSibling.offsetWidth;
-        }
-        wordBox.style.transform = `translateX(-${offset}px)`;
+    // Calculer le décalage en fonction de tous les mots sauf les 2 derniers
+    const wordsElements = wordBox.querySelectorAll('.word');
+    let newOffset = 0;
+    for (let i = 0; i < wordsElements.length - 2; i++) {
+        newOffset += wordsElements[i].offsetWidth;
+    }
 
-        counterDisplay.textContent = `Appuis : ${clickCount}`;
+    offset = newOffset;
+    wordBox.style.transform = `translateX(-${offset}px)`;
+
+    counterDisplay.textContent = `Appuis : ${clickCount}`;
     });
 
     resetBtn.addEventListener('click', () => {
