@@ -7,12 +7,12 @@
 
     <title>Super Giveaway</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="../resources/snifsnouf/favicon.png">
+    <link rel="icon" type="image/png" href="../../resources/snifsnouf/favicon.png">
 </head>
 <body onload="generateLinks()">
     <div class="video-container">
         <video autoplay muted loop id="background-video">
-            <source src="../resources/snifsnouf/background.mp4" type="video/mp4">
+            <source src="../../resources/snifsnouf/background.mp4" type="video/mp4">
             Votre navigateur ne supporte pas les vidéos HTML5.
         </video>
     </div>
@@ -77,8 +77,8 @@
                         const resolvedBlock = position ?? 0; // Par défaut dans le bloc 0 si aucune position
 
                         const url = `https://www.instant-gaming.com/fr/giveaway/${urlSuffix}`;
-                        const imgSrc = `../resources/snifsnouf/PP/img_${urlSuffix}.jpg`;
-                        const fallbackImgSrc = '../resources/snifsnouf/img_DEFAULT.png';
+                        const imgSrc = `../../resources/snifsnouf/PP/img_${urlSuffix}.jpg`;
+                        const fallbackImgSrc = '../../resources/snifsnouf/img_DEFAULT.png';
 
                         // Créer l'image avec ses boutons et la placer
                         const imgContainer = createImageWithButtons(url, imgSrc, fallbackImgSrc, key);
